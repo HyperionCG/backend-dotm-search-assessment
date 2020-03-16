@@ -44,13 +44,12 @@ def main():
         parser.print_usage()
         sys.exit(1)
 
-    print("Searching directory {} for dotm fimes with text '{}' ...".format(search_path))
+    print("Searching directory {} for dotm fimes with text '{}' ...".format(search_path, search_text))
 
     # Get a list of all the files in the search path.
     # This is not a recursive search.
     # Could also use os.walk()
-    file_list = os.;istdir(search_path)
-    DOC_FILENAME = 'word/document.xml'
+    file_list = os.listdir(search_path)
     match_count = 0
     search_count = 0
 
@@ -68,13 +67,8 @@ def main():
                 names = z.namelist()
 
                 if DOC_FILENAME in names:
-                    with z.open(DOC_FILENAME, 'r') as doc:
-                        for line in doc:
-                            text_location = line.find(search_text)
-                            if text_location >= 0:
-                                match_count += 1
-                                print('Match found in file {}'.format(full_path))
-                                print('  ...' + line[text_location-40:text_location])
+                    if scan_zipfile(z, search_text, full_path):
+                        match_count += 1
         else:
             print("Not a zipfile: " + full_path)
     
